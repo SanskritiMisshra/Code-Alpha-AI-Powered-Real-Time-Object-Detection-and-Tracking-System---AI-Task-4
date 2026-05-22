@@ -1,0 +1,25 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Models
+models/
+*.pt
+
+# Outputs
+output/
+*.mp4
+*.jpg
+*.png
+*.avi
+
+# Environments
+venv/
+env/
+.env
+.venv
+
+# OS generated files
+.DS_Store
+Thumbs.db
