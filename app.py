@@ -363,7 +363,7 @@ if st.session_state.running:
         # Write uploaded bytes to a temp file
         tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".mp4")
         tmp.write(video_file.read())
-        tmp.flush()
+        tmp.close()  # Close the file so OpenCV can read it (important on Windows!)
         source = tmp.name
 
     # ── Initialize components ────────────────────────────────
