@@ -10,6 +10,8 @@ import time
 import os
 from collections import deque
 
+OUTPUT_DIR = os.environ.get("TRACKER_OUTPUT_DIR", "output")
+
 
 class VideoStreamProcessor:
     """Handles video input, frame reading, FPS calculation, recording, and screenshots."""
@@ -80,9 +82,9 @@ class VideoStreamProcessor:
         h = height or self.height
         f = fps or min(self.source_fps, 30)
 
-        os.makedirs("output", exist_ok=True)
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
         timestamp = int(time.time())
-        self.output_path = os.path.join("output", f"recording_{timestamp}.mp4")
+        self.output_path = os.path.join(OUTPUT_DIR, f"recording_{timestamp}.mp4")
 
         fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         self.writer = cv2.VideoWriter(self.output_path, fourcc, f, (w, h))
@@ -106,9 +108,9 @@ class VideoStreamProcessor:
     @staticmethod
     def save_screenshot(frame, prefix="screenshot"):
         """Save a single annotated frame as JPEG. Returns the file path."""
-        os.makedirs("output", exist_ok=True)
+        os.makedirs(OUTPUT_DIR, exist_ok=True)
         ts = int(time.time() * 1000)
-        path = os.path.join("output", f"{prefix}_{ts}.jpg")
+        path = os.path.join(OUTPUT_DIR, f"{prefix}_{ts}.jpg")
         cv2.imwrite(path, frame)
         return path
 
