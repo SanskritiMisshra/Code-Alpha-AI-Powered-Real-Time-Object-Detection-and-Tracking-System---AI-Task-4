@@ -46,61 +46,63 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
     :root {
-        --accent: #00d4bb;
-        --accent-glow: rgba(0, 212, 187, 0.35);
-        --danger: #ff4757;
-        --bg-dark: #0a0e17;
-        --bg-card: #111827;
-        --bg-card-hover: #1a2332;
-        --text-primary: #e2e8f0;
-        --text-secondary: #94a3b8;
-        --border-subtle: rgba(255,255,255,0.06);
+        --bg-dark: #0B0F14;
+        --bg-surface: #111827;
+        --bg-card: #161E2E;
+        --bg-elevated: #1C2536;
+        --border-color: #1F2937;
+        --text-primary: #F3F4F6;
+        --text-secondary: #94A3B8;
+        --text-muted: #64748B;
+        --accent: #3B82F6;
+        --accent-hover: #2563EB;
+        --danger: #EF4444;
     }
 
     .stApp {
         background: var(--bg-dark);
         font-family: 'Inter', sans-serif;
+        color: var(--text-primary);
     }
 
     /* ── Sidebar ───────────────────────────────────────────── */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0f1623 0%, #0a0e17 100%);
-        border-right: 1px solid var(--border-subtle);
+        background: var(--bg-dark);
+        border-right: 1px solid var(--border-color);
     }
     section[data-testid="stSidebar"] h1,
     section[data-testid="stSidebar"] h2,
     section[data-testid="stSidebar"] h3 {
-        color: var(--accent) !important;
+        color: var(--text-primary) !important;
         font-weight: 600;
-        letter-spacing: 0.03em;
+        letter-spacing: 0.02em;
     }
 
     /* ── Headers ───────────────────────────────────────────── */
     h1 {
-        background: linear-gradient(135deg, #00d4bb 0%, #00b4d8 50%, #7c3aed 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: var(--text-primary) !important;
         font-weight: 700 !important;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
     }
     h2, h3, h4 {
-        color: #e2e8f0 !important;
+        color: var(--text-primary) !important;
     }
 
     /* ── Buttons ───────────────────────────────────────────── */
     .stButton > button {
-        background: linear-gradient(135deg, #00d4bb 0%, #00b4d8 100%);
-        color: #000 !important;
+        background: var(--accent);
+        color: #ffffff !important;
         font-weight: 600;
         border: none;
-        border-radius: 8px;
-        padding: 0.5rem 1.2rem;
-        box-shadow: 0 0 20px var(--accent-glow);
-        transition: all 0.25s ease;
+        border-radius: 10px;
+        padding: 10px 18px;
+        transition: all 0.2s ease;
+        box-shadow: none;
     }
     .stButton > button:hover {
+        background: var(--accent-hover);
         transform: translateY(-1px);
-        box-shadow: 0 0 30px var(--accent-glow), 0 4px 15px rgba(0,0,0,0.3);
+        color: #ffffff !important;
     }
     .stButton > button:active {
         transform: translateY(0);
@@ -108,23 +110,24 @@ st.markdown("""
 
     /* ── Metrics ───────────────────────────────────────────── */
     [data-testid="stMetric"] {
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
         padding: 1rem 1.2rem;
-        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        box-shadow: none;
     }
     [data-testid="stMetricLabel"] {
-        color: var(--text-secondary) !important;
-        font-size: 0.78rem !important;
+        color: var(--text-muted) !important;
+        font-size: 0.81rem !important;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.05em;
+        font-weight: 500;
     }
     [data-testid="stMetricValue"] {
-        color: var(--accent) !important;
+        color: var(--text-primary) !important;
         font-family: 'JetBrains Mono', monospace;
         font-size: 1.8rem !important;
-        font-weight: 700;
+        font-weight: 600;
     }
 
     /* ── Sliders / Inputs ──────────────────────────────────── */
@@ -132,14 +135,18 @@ st.markdown("""
         background: var(--accent) !important;
     }
     .stSelectbox > div > div,
-    .stMultiSelect > div > div {
-        background: var(--bg-card) !important;
-        border-color: var(--border-subtle) !important;
+    .stMultiSelect > div > div,
+    .stTextInput > div > div {
+        background: var(--bg-surface) !important;
+        border: 1px solid var(--border-color) !important;
+        color: var(--text-primary) !important;
+        border-radius: 8px;
     }
 
     /* ── Expander ──────────────────────────────────────────── */
     .streamlit-expanderHeader {
-        background: var(--bg-card) !important;
+        background: var(--bg-surface) !important;
+        border: 1px solid var(--border-color) !important;
         border-radius: 8px;
     }
 
@@ -151,22 +158,32 @@ st.markdown("""
         background: var(--bg-card);
         border-radius: 8px 8px 0 0;
         color: var(--text-secondary);
-        border: 1px solid var(--border-subtle);
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
     }
     .stTabs [aria-selected="true"] {
-        background: var(--bg-card-hover) !important;
+        background: var(--bg-elevated) !important;
         color: var(--accent) !important;
-        border-bottom: 2px solid var(--accent);
+        border-bottom: 2px solid var(--accent) !important;
+    }
+    .stTabs [data-baseweb="tab-panel"] {
+        background: var(--bg-card);
+        padding: 1.5rem;
+        border-radius: 0 8px 8px 8px;
+        border: 1px solid var(--border-color);
+        border-top: none;
     }
 
     /* ── Divider ───────────────────────────────────────────── */
     hr {
-        border-color: var(--border-subtle) !important;
+        border-color: var(--border-color) !important;
     }
 
     /* ── Toast / success / error ───────────────────────────── */
     .stAlert {
         border-radius: 8px;
+        background: var(--bg-surface) !important;
+        border: 1px solid var(--border-color) !important;
     }
 
     /* ── Hide default hamburger & footer ───────────────────── */
@@ -175,17 +192,17 @@ st.markdown("""
 
     /* ── Custom stat card ──────────────────────────────────── */
     .stat-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border-subtle);
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
         padding: 1rem;
         text-align: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        box-shadow: none;
     }
     .stat-card h4 {
         margin: 0;
         font-size: 0.75rem;
-        color: var(--text-secondary);
+        color: var(--text-muted);
         text-transform: uppercase;
         letter-spacing: 0.08em;
     }
@@ -193,8 +210,14 @@ st.markdown("""
         font-family: 'JetBrains Mono', monospace;
         font-size: 2rem;
         font-weight: 700;
-        color: var(--accent);
+        color: var(--text-primary);
         margin: 0.3rem 0;
+    }
+    
+    /* ── Video Feed ────────────────────────────────────────── */
+    [data-testid="stImage"] > img {
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
     }
 </style>
 """, unsafe_allow_html=True)

@@ -7,29 +7,13 @@
 
 import numpy as np
 
-# ── Predefined colors for different classes (BGR format for OpenCV) ──────────
-CLASS_COLORS = [
-    (255, 56, 56),   # Red
-    (255, 157, 151), # Light Red
-    (255, 112, 31),  # Orange
-    (255, 178, 29),  # Yellow
-    (207, 210, 49),  # Olive
-    (72, 249, 10),   # Green
-    (146, 204, 23),  # Lime
-    (61, 219, 134),  # Sea Green
-    (26, 147, 52),   # Dark Green
-    (0, 212, 187),   # Cyan
-    (44, 153, 168),  # Teal
-    (0, 194, 255),   # Light Blue
-    (52, 69, 147),   # Dark Blue
-    (100, 115, 255), # Purple-Blue
-    (0, 24, 236),    # Deep Blue
-    (132, 56, 255),  # Violet
-    (82, 0, 133),    # Dark Violet
-    (203, 56, 255),  # Magenta
-    (255, 149, 200), # Pink
-    (255, 55, 199)   # Hot Pink
-]
+# ── Strict SOC Colors (BGR format for OpenCV) ────────────────────────────────
+SOC_COLORS = {
+    "person": (246, 130, 59),     # #3B82F6 (Blue)
+    "vehicle": (129, 185, 16),    # #10B981 (Green)
+    "alert": (68, 68, 239),       # #EF4444 (Red)
+    "unknown": (11, 158, 245)     # #F59E0B (Orange)
+}
 
 # ── COCO 80 Dataset Classes ─────────────────────────────────────────────────
 COCO_CLASSES = [
@@ -63,8 +47,18 @@ def get_group_class_ids(group_name):
 
 
 def get_color(class_id):
-    """Return a consistent color for a given class ID."""
-    return CLASS_COLORS[int(class_id) % len(CLASS_COLORS)]
+    """Return a consistent SOC color based on class category."""
+    try:
+        name = COCO_CLASSES[int(class_id)]
+        if name in ALERT_CLASSES:
+            return SOC_COLORS["alert"]
+        if name in CLASS_GROUPS.get("People", []):
+            return SOC_COLORS["person"]
+        if name in CLASS_GROUPS.get("Vehicles", []):
+            return SOC_COLORS["vehicle"]
+        return SOC_COLORS["unknown"]
+    except:
+        return SOC_COLORS["unknown"]
 
 
 def get_color_rgb(class_id):
@@ -75,14 +69,14 @@ def get_color_rgb(class_id):
 
 # ── Modern UI Settings for OpenCV Rendering ──────────────────────────────────
 UI_SETTINGS = {
-    "font": 2,               # cv2.FONT_HERSHEY_COMPLEX
-    "font_scale": 0.55,
-    "thickness": 2,
-    "box_thickness": 2,
-    "alpha": 0.55,            # Transparency for background panels
-    "bg_color": (15, 15, 15),
-    "hud_height": 70,         # Height of the top HUD bar in pixels
-    "trail_max_len": 50,      # Maximum number of trail points to draw
+    "font": 0,                # cv2.FONT_HERSHEY_SIMPLEX (Clean, modern)
+    "font_scale": 0.50,
+    "thickness": 1,
+    "box_thickness": 1,       # Thin subtle borders
+    "alpha": 0.80,            # Darker overlays
+    "bg_color": (20, 15, 11), # #0B0F14 in BGR
+    "hud_height": 40,         # Slimmer top HUD
+    "trail_max_len": 40,
 }
 
 # ── Alert configuration ─────────────────────────────────────────────────────

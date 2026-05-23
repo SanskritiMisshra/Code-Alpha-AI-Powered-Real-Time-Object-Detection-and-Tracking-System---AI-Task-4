@@ -11,102 +11,82 @@ import math
 from .config import get_color, UI_SETTINGS
 
 
-# ─── Glow effect helper ─────────────────────────────────────────────────────
 
-def _add_glow(img, pt1, pt2, color, intensity=0.35, blur_size=21):
-    """Draws a soft glow around a rectangle region."""
-    glow = np.zeros_like(img, dtype=np.uint8)
-    cv2.rectangle(glow, pt1, pt2, color, -1)
-    glow = cv2.GaussianBlur(glow, (blur_size, blur_size), 0)
-    cv2.addWeighted(glow, intensity, img, 1.0, 0, img)
+# ─── Professional Technical Box ──────────────────────────────────────────────
 
-
-# ─── Rounded-corner box with edge highlights ────────────────────────────────
-
-def draw_modern_box(img, pt1, pt2, color, thickness, r=12, d=22):
-    """Draw a bounding box with rounded corners and futuristic edge highlights."""
+def draw_modern_box(img, pt1, pt2, color, thickness=1, r=4, d=10):
+    """Draw a sharp, analytical bounding box with thin borders and minimal corners."""
     x1, y1 = pt1
     x2, y2 = pt2
 
     # Ensure the box is large enough for corner decorations
     w = x2 - x1
     h = y2 - y1
-    r = min(r, w // 4, h // 4, 12)
-    d = min(d, w // 3, h // 3, 22)
-    if r < 2 or d < 2:
-        cv2.rectangle(img, pt1, pt2, color, thickness)
-        return
-
-    # Faint inner fill
-    overlay = img.copy()
-    cv2.rectangle(overlay, pt1, pt2, color, -1)
-    cv2.addWeighted(overlay, 0.08, img, 0.92, 0, img)
-
-    # Subtle glow behind the box
-    _add_glow(img, pt1, pt2, color, intensity=0.12, blur_size=31)
-
+    r = min(r, w // 4, h // 4, 4)
+    d = min(d, w // 3, h // 3, 10)
+    
     # Thin full rectangle
     cv2.rectangle(img, pt1, pt2, color, 1)
 
-    # Corner accents — Top left
-    cv2.line(img, (x1 + r, y1), (x1 + r + d, y1), color, thickness)
-    cv2.line(img, (x1, y1 + r), (x1, y1 + r + d), color, thickness)
-    cv2.ellipse(img, (x1 + r, y1 + r), (r, r), 180, 0, 90, color, thickness)
+    if r < 2 or d < 2:
+        return
 
+    # Corner accents (slightly thicker for a technical feel)
+    accent_thick = 2
+    
+    # Top left
+    cv2.line(img, (x1, y1), (x1 + d, y1), color, accent_thick)
+    cv2.line(img, (x1, y1), (x1, y1 + d), color, accent_thick)
     # Top right
-    cv2.line(img, (x2 - r, y1), (x2 - r - d, y1), color, thickness)
-    cv2.line(img, (x2, y1 + r), (x2, y1 + r + d), color, thickness)
-    cv2.ellipse(img, (x2 - r, y1 + r), (r, r), 270, 0, 90, color, thickness)
-
+    cv2.line(img, (x2, y1), (x2 - d, y1), color, accent_thick)
+    cv2.line(img, (x2, y1), (x2, y1 + d), color, accent_thick)
     # Bottom left
-    cv2.line(img, (x1 + r, y2), (x1 + r + d, y2), color, thickness)
-    cv2.line(img, (x1, y2 - r), (x1, y2 - r - d), color, thickness)
-    cv2.ellipse(img, (x1 + r, y2 - r), (r, r), 90, 0, 90, color, thickness)
-
+    cv2.line(img, (x1, y2), (x1 + d, y2), color, accent_thick)
+    cv2.line(img, (x1, y2), (x1, y2 - d), color, accent_thick)
     # Bottom right
-    cv2.line(img, (x2 - r, y2), (x2 - r - d, y2), color, thickness)
-    cv2.line(img, (x2, y2 - r), (x2, y2 - r - d), color, thickness)
-    cv2.ellipse(img, (x2 - r, y2 - r), (r, r), 0, 0, 90, color, thickness)
+    cv2.line(img, (x2, y2), (x2 - d, y2), color, accent_thick)
+    cv2.line(img, (x2, y2), (x2, y2 - d), color, accent_thick)
 
 
-# ─── Text with pill-shaped background ───────────────────────────────────────
+# ─── Text with solid background ──────────────────────────────────────────────
 
-def draw_label(img, text, position, text_color=(255, 255, 255), bg_color=(0, 0, 0)):
-    """Draw text on a pill-shaped translucent background."""
+def draw_label(img, text, position, text_color=(243, 244, 246), bg_color=(39, 24, 17)):
+    """Draw text on a sharp, semi-transparent background (#111827)."""
     font = cv2.FONT_HERSHEY_SIMPLEX
-    font_scale = 0.55
+    font_scale = 0.45
     thickness = 1
 
     (tw, th), baseline = cv2.getTextSize(text, font, font_scale, thickness)
     x, y = position
-    pad = 6
+    pad_x = 6
+    pad_y = 4
 
     # Clamp so the label doesn't go off-screen
-    y = max(th + pad * 2, y)
+    y = max(th + pad_y * 2, y)
     x = max(0, x)
 
-    # Pill background
+    # Solid background
     overlay = img.copy()
-    cv2.rectangle(overlay, (x, y - th - pad), (x + tw + pad * 2, y + pad), bg_color, -1)
-    cv2.addWeighted(overlay, 0.7, img, 0.3, 0, img)
+    cv2.rectangle(overlay, (x, y - th - pad_y), (x + tw + pad_x * 2, y + pad_y), bg_color, -1)
+    cv2.rectangle(overlay, (x, y - th - pad_y), (x + tw + pad_x * 2, y + pad_y), (55, 41, 31), 1) # #1F2937 border
+    cv2.addWeighted(overlay, 0.85, img, 0.15, 0, img)
 
-    cv2.putText(img, text, (x + pad, y), font, font_scale, text_color, thickness, cv2.LINE_AA)
+    cv2.putText(img, text, (x + pad_x, y), font, font_scale, text_color, thickness, cv2.LINE_AA)
 
 
 # ─── Gradient trail ─────────────────────────────────────────────────────────
 
-def draw_gradient_trail(img, trail_points, color, max_thickness=6):
-    """Draw a trail that fades from transparent to solid and thins over time."""
+def draw_gradient_trail(img, trail_points, color, max_thickness=1):
+    """Draw a trail that is faint and analytical."""
     n = len(trail_points)
     if n < 2:
         return
     for j in range(1, n):
         if trail_points[j - 1] is None or trail_points[j] is None:
             continue
-        alpha = j / n  # 0→old, 1→new
-        t = max(1, int(max_thickness * alpha))
-        c = tuple(int(ch * alpha) for ch in color)
-        cv2.line(img, trail_points[j - 1], trail_points[j], c, t, cv2.LINE_AA)
+        # Faint opacity, constant thickness
+        c = tuple(int(ch * 0.4) for ch in color)
+        cv2.line(img, trail_points[j - 1], trail_points[j], c, 1, cv2.LINE_AA)
 
 
 # ─── Speed badge ────────────────────────────────────────────────────────────
